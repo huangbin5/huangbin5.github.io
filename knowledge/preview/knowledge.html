@@ -1,17 +1,80 @@
-# Linux
+<html>
+  <head>
+	  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <title>i5ting_ztree_toc:knowledge</title>
+		<link href="toc/style/github-bf51422f4bb36427d391e4b75a1daa083c2d840e.css" media="all" rel="stylesheet" type="text/css"/>
+		<link href="toc/style/github2-d731afd4f624c99a4b19ad69f3083cd6d02b81d5.css" media="all" rel="stylesheet" type="text/css"/>
+		<link href="toc/css/zTreeStyle/zTreeStyle.css" media="all" rel="stylesheet" type="text/css"/>
+	  <style>
+		pre {
+		    counter-reset: line-numbering;
+		    border: solid 1px #d9d9d9;
+		    border-radius: 0;
+		    background: #fff;
+		    padding: 0;
+		    line-height: 23px;
+		    margin-bottom: 30px;
+		    white-space: pre;
+		    overflow-x: auto;
+		    word-break: inherit;
+		    word-wrap: inherit;
+		}
 
-##常用命令
+		pre a::before {
+		  content: counter(line-numbering);
+		  counter-increment: line-numbering;
+		  padding-right: 1em; /* space after numbers */
+		  width: 25px;
+		  text-align: right;
+		  opacity: 0.7;
+		  display: inline-block;
+		  color: #aaa;
+		  background: #eee;
+		  margin-right: 16px;
+		  padding: 2px 10px;
+		  font-size: 13px;
+		  -webkit-touch-callout: none;
+		  -webkit-user-select: none;
+		  -khtml-user-select: none;
+		  -moz-user-select: none;
+		  -ms-user-select: none;
+		  user-select: none;
+		}
 
-### echo
+		pre a:first-of-type::before {
+		  padding-top: 10px;
+		}
 
-```sh
--n：不输出换行，默认是会换行的
--e：解析转义字符和彩色输出，否则"\n"之类的特殊字符会直接按字面输出
-echo "`ll`" # 加上""按原命的输出格式进行输出
+		pre a:last-of-type::before {
+		  padding-bottom: 10px;
+		}
 
-# 双引号""和单引号''的区别
-echo "test $a" # 可以解析变量
-echo 'test $a' # $a会按字面输出
+		pre a:only-of-type::before {
+		  padding: 10px;
+		}
+
+		.highlight { background-color: #ffffcc } /* RIGHT */
+		</style>
+  </head>
+  <body>
+	  <div>
+				<div style='width:25%;'>
+						<ul id="tree" class="ztree" style='width:100%'>
+
+						</ul>
+				</div>
+        <div id='readme' style='width:70%;margin-left:20%;'>
+          	<article class='markdown-body'>
+            	<h1 id="1-linux">1. Linux</h1>
+<h2 id="1-1-">1.1. 常用命令</h2>
+<h3 id="1-1-1-echo">1.1.1. echo</h3>
+<pre><code class="lang-sh">-n：不输出换行，默认是会换行的
+-e：解析转义字符和彩色输出，否则&quot;\n&quot;之类的特殊字符会直接按字面输出
+echo &quot;`ll`&quot; # 加上&quot;&quot;按原命的输出格式进行输出
+
+# 双引号&quot;&quot;和单引号&#39;&#39;的区别
+echo &quot;test $a&quot; # 可以解析变量
+echo &#39;test $a&#39; # $a会按字面输出
 
 # 转义字符
 \n：换行
@@ -28,13 +91,10 @@ echo 'test $a' # $a会按字面输出
 前景色：30-黑色；31-红色；32-绿色；33-黄色；34-蓝色；35-紫色；36-浅蓝色；37-灰色
 背景色：40-黑色；41-红色；42-绿色；44-黄色；44-蓝色；45-紫色；46-浅蓝色；47-灰色
 其它：1-高亮；3-斜体；4-下划线；9-删除线
-	 0-复位(0可省略)；5-闪烁；7-反色(前背景互换)；8-隐身(字体颜色设为背景色)
-```
-
-### printf
-
-```sh
-# 基本语法：print format input
+     0-复位(0可省略)；5-闪烁；7-反色(前背景互换)；8-隐身(字体颜色设为背景色)
+</code></pre>
+<h3 id="1-1-2-printf">1.1.2. printf</h3>
+<pre><code class="lang-sh"># 基本语法：print format input
 # printf默认不会换行
 
 # 格式替换字符
@@ -53,12 +113,9 @@ echo 'test $a' # $a会按字面输出
 %+d：当后面的数是整数时显示正号
 %.3f：浮点数保留3位小数
 %12.5d：表示占12位宽，整数长度为5，不足时前面补0
-```
-
-###grep
-
-```sh 
-# 基本语法：grep [option] exp files
+</code></pre>
+<h3 id="1-1-3-grep">1.1.3. grep</h3>
+<pre><code class="lang-sh"># 基本语法：grep [option] exp files
 --color：高亮显示
 -E：使用正则表达式
 -i：忽略大小写
@@ -75,12 +132,9 @@ echo 'test $a' # $a会按字面输出
 grep -q exp file
 echo $?
 # 当有匹配时返回0，没有匹配时返回1
-```
-
-### sed
-
-```sh
-# 基本语法：sed [option] [-e script] [-f script_file] files
+</code></pre>
+<h3 id="1-1-4-sed">1.1.4. sed</h3>
+<pre><code class="lang-sh"># 基本语法：sed [option] [-e script] [-f script_file] files
 # 其中在命令中直接输入script时-e选项可以省略
 # 默认会输出处理后的所有行，如果不想要默认输出则使用-n选项
 a：在指定行后面追加一行
@@ -90,38 +144,28 @@ c：替换指定行
 s：替换指定字符串
 p：打印指定行。一般与-n一起使用，否则除了打印指定行之外还会默认打印所有行
 
-sed '4a newline' file # 在第4行后面添加一行，内容为newline
-sed '4a \ ' file # 添加只有一个空格的行
-sed '4a \\' file # 添加一个空白行
-sed '3,5d' file # 删除第3-5行
-sed '2,$c newlines' file # 将第2行到最后一行替换为newlines一行
-sed 's/ev/op/g' file # 将ev替换为op，如果最后面没有g，则只替换每一行的第一个匹配项
-sed -n '/^ev/p' file # 打印以ev开头的行
-sed -n '/ev/{s/ev/op/g;p}' file # 将ev替换为op并输出修改的行
+sed &#39;4a newline&#39; file # 在第4行后面添加一行，内容为newline
+sed &#39;4a \ &#39; file # 添加只有一个空格的行
+sed &#39;4a \\&#39; file # 添加一个空白行
+sed &#39;3,5d&#39; file # 删除第3-5行
+sed &#39;2,$c newlines&#39; file # 将第2行到最后一行替换为newlines一行
+sed &#39;s/ev/op/g&#39; file # 将ev替换为op，如果最后面没有g，则只替换每一行的第一个匹配项
+sed -n &#39;/^ev/p&#39; file # 打印以ev开头的行
+sed -n &#39;/ev/{s/ev/op/g;p}&#39; file # 将ev替换为op并输出修改的行
 
 -i：sed默认只输出修改后的内容而不会修改原文件，加上该选项后可修改原文件
-sed -e '2d' -e '5a newline' file # 依次执行多条命令
-```
-
-### diff
-
-```sh
-# 比较两个命令输出的差异
-diff <(cmd1) <(cmd2)
-```
-
-### seq
-
-### let
-
-## vim
-
-## shell
-
-###变量
-
-```sh
-# 全局变量
+sed -e &#39;2d&#39; -e &#39;5a newline&#39; file # 依次执行多条命令
+</code></pre>
+<h3 id="1-1-5-diff">1.1.5. diff</h3>
+<pre><code class="lang-sh"># 比较两个命令输出的差异
+diff &lt;(cmd1) &lt;(cmd2)
+</code></pre>
+<h3 id="1-1-6-seq">1.1.6. seq</h3>
+<h3 id="1-1-7-let">1.1.7. let</h3>
+<h2 id="1-2-vim">1.2. vim</h2>
+<h2 id="1-3-shell">1.3. shell</h2>
+<h3 id="1-3-1-">1.3.1. 变量</h3>
+<pre><code class="lang-sh"># 全局变量
 var=value # 创建变量
 $var：使用变量
 ${var}str：当变量后面接其它字符时，需要用{}将变量名包裹
@@ -147,8 +191,8 @@ ${11}：如果参数位置超过一位数，需要将下标用大括号{}包裹
 shift 2 # 剔除前2个参数，原来的第3个参数就变成了第1个参数
 $?：保存着上一个命令的执行状态，范围为0-255，0表示正确执行，1、2、127为系统预留的状态码
 $#：脚本中传入参数的个数
-$@：当不加引号时，$@和$*等价，也与"$@"等价，都是以数组的形式传递参数列表
-$*：当加上引号时，"$*"传递的是由所有参数组成的字符串
+$@：当不加引号时，$@和$*等价，也与&quot;$@&quot;等价，都是以数组的形式传递参数列表
+$*：当加上引号时，&quot;$*&quot;传递的是由所有参数组成的字符串
 ${@:2}：获取第2个参数后面的所有参数，@可以换成*
 ${@:2:3}：获取第2个参数后面的3个参数
 $$：脚本运行的进程ID
@@ -160,14 +204,11 @@ declare -i var=value # 指定变量为一个整型
 declare -x var=value # 声明环境变量
 declare -r var=value # 声明只读变量
 declare -xr var=value # 声明一个只读环境变量
-```
-
-### 字符串
-
-```sh
-# 定义字符串
-var='a$int\str' # 单引号里的内容会原样输出，因此无法使用转义字符，也无法引用变量
-var="\"$arr\"\n" # 双引号中可以使用转义字符，也可以引用变量
+</code></pre>
+<h3 id="1-3-2-">1.3.2. 字符串</h3>
+<pre><code class="lang-sh"># 定义字符串
+var=&#39;a$int\str&#39; # 单引号里的内容会原样输出，因此无法使用转义字符，也无法引用变量
+var=&quot;\&quot;$arr\&quot;\n&quot; # 双引号中可以使用转义字符，也可以引用变量
 
 # 获取字符串长度
 ${#var}
@@ -199,12 +240,9 @@ ${var:=value}：当var为空时返回value，并将var赋值为value
 ${var:-value}：当var为空时返回value，但不进行赋值操作
 ${var:+value}：当var不为空时返回value，也不进行赋值操作
 ${var:?value}：输出bash错误，其中value为错误提示信息
-```
-
-### 数组
-
-```sh
-var=(value1 value2 ...) # 定义数组
+</code></pre>
+<h3 id="1-3-3-">1.3.3. 数组</h3>
+<pre><code class="lang-sh">var=(value1 value2 ...) # 定义数组
 var[10]=ten # 可以单独为某个元素赋值，下标没有长度限制
 ${var[2]}：根据下标获取元素
 ${var[@]}：获取所有元素，只写var默认获取的是第1个元素
@@ -216,12 +254,9 @@ ${#var[*]}：同上
 declare -A var=([key1]=value1 [key2]=value2)
 ${!var[@]}：获取所有的key
 ${!var[*]}：同上
-```
-
-### 算术运算
-
-```sh
-# 使用let命令
+</code></pre>
+<h3 id="1-3-4-">1.3.4. 算术运算</h3>
+<pre><code class="lang-sh"># 使用let命令
 let var=1+2：$var=3
 # let只支持整数运算
 let var=5/2 # $var=2，只保留结果的整数部分
@@ -233,11 +268,11 @@ expr 1 + 2 # 输出3
 var=`expr 5 \* 2` # $var=2
 
 # 使用bc命令，支持浮点数运算
-echo '2.3+4' | bc # 输出6.3
+echo &#39;2.3+4&#39; | bc # 输出6.3
 # 除法运算时需要指定精度，否则只会保留整数部分
-echo 'scale=3;8/3' | bc # 输出2.666
+echo &#39;scale=3;8/3&#39; | bc # 输出2.666
 # 不使用管道，直接使用bc命令
-bc <<< '2.3+4'
+bc &lt;&lt;&lt; &#39;2.3+4&#39;
 
 # 使用算术运算语法，只支持整数运算
 var=$[3+4] # $var=7
@@ -245,26 +280,23 @@ var=$((8/3)) # $var=2
 
 # 直接声明变量为整型变量
 declare -i var=1+3 # $var=4
-```
-
-### 逻辑关系运算符
-
-```sh
-# 非：!
-# 与：-a或&&，&&有短路功能
+</code></pre>
+<h3 id="1-3-5-">1.3.5. 逻辑关系运算符</h3>
+<pre><code class="lang-sh"># 非：!
+# 与：-a或&amp;&amp;，&amp;&amp;有短路功能
 # 或：-o或||，||有短路功能
 # 除了是否有短路功能外，两者在语法上也有差别
 [ $var1 -a $var2 ]
-[ $var1 ] && [ $var2 ]
-[[ $var1 && $var2 ]]
-[[ $var1 ]] && [[ $var2 ]]
-# &&和||也可以用来控制多条命令的执行
-cmd1 && cmd2 # 当cmd1执行成功后执行cmd2
+[ $var1 ] &amp;&amp; [ $var2 ]
+[[ $var1 &amp;&amp; $var2 ]]
+[[ $var1 ]] &amp;&amp; [[ $var2 ]]
+# &amp;&amp;和||也可以用来控制多条命令的执行
+cmd1 &amp;&amp; cmd2 # 当cmd1执行成功后执行cmd2
 cmd1 || cmd2 # 当cmd1执行失败后执行cmd2
 
-# 大于>和小于<，支持整数和字符串的比较。=和==都可以用来判等
-[ 2 \> 1 ] # 当使用单括号时需要进行转义
-[[ 'a' < 'b' ]]
+# 大于&gt;和小于&lt;，支持整数和字符串的比较。=和==都可以用来判等
+[ 2 \&gt; 1 ] # 当使用单括号时需要进行转义
+[[ &#39;a&#39; &lt; &#39;b&#39; ]]
 # 当比较数字大小时也可以使用-gt和-lt，不支持字符串比较
 [ 1 -lt 2 ]
 [[ 2 -gt 1 ]]
@@ -272,32 +304,26 @@ cmd1 || cmd2 # 当cmd1执行失败后执行cmd2
 
 # 匹配正则表达式
 [[ $var =~ /exp/]]
-```
-
-### 文件测试运算符
-
-```sh
-# file是文件路径
+</code></pre>
+<h3 id="1-3-6-">1.3.6. 文件测试运算符</h3>
+<pre><code class="lang-sh"># file是文件路径
 [ -d $file ]：判断是否目录
 [ -f $file ]：判断是否文件
 [ -r $file ]：判断文件是否可读
 [ -w $file ]：判断文件是否可写
 [ -x $file ]：判断文件是否可执行
 [ -e $file ]：判断文件是否存在
-```
-
-### 控制流程
-
-```sh
-# 条件控制语句
+</code></pre>
+<h3 id="1-3-7-">1.3.7. 控制流程</h3>
+<pre><code class="lang-sh"># 条件控制语句
 if condition
 then
-	command
+    command
 elif condition
 then
-	command
+    command
 else
-	command
+    command
 fi
 # 在终端写成一行
 if condition; then command; elif condition; then command; else command; fi
@@ -305,7 +331,7 @@ if condition; then command; elif condition; then command; else command; fi
 # for循环语句
 for var in value1 value2
 do
-	command
+    command
 done
 # 在终端写成一行
 for var in value1 value2; do command; done
@@ -331,101 +357,86 @@ while :
 # case语句
 case var in
 1|2|3)
-	command
-	;; # break
+    command
+    ;; # break
 *) # *表示默认选项
-	command
-	;;
+    command
+    ;;
 esac
-```
-
-### 函数
-
-```sh
-function func() { # function关键字和()都可以省略
-	command; # 每行末尾需要加上分号;
-	return x; # 返回0-255中的状态码，如果没有return语句则返回最后一条命令的状态码
+</code></pre>
+<h3 id="1-3-8-">1.3.8. 函数</h3>
+<pre><code class="lang-sh">function func() { # function关键字和()都可以省略
+    command; # 每行末尾需要加上分号;
+    return x; # 返回0-255中的状态码，如果没有return语句则返回最后一条命令的状态码
 }
 func # 直接调用函数
 func 1 2 3: # 带参数调用，函数内部可以使用$1之类的变量获取参数
-```
-
-### 重定向
-
-```sh
-cmd > file # 输出重定向，覆盖原文件
-cmd >> file # 输出重定向，往原文件末尾追加
-cmd < file # 输入重定向，将file的内容作为cmd的输入
+</code></pre>
+<h3 id="1-3-9-">1.3.9. 重定向</h3>
+<pre><code class="lang-sh">cmd &gt; file # 输出重定向，覆盖原文件
+cmd &gt;&gt; file # 输出重定向，往原文件末尾追加
+cmd &lt; file # 输入重定向，将file的内容作为cmd的输入
 # shell默认打开的3个文件：0-stdin; 1-stdout; 2-stderr
-cmd 2>file # 将stderr重定向
-cmd > file 2>&1 # 将输出和错误都重定向
-cmd < file1 > file2 # 将输入和输出都重定向
+cmd 2&gt;file # 将stderr重定向
+cmd &gt; file 2&gt;&amp;1 # 将输出和错误都重定向
+cmd &lt; file1 &gt; file2 # 将输入和输出都重定向
 # /dev/null是一个特殊的文件，写入其中的内容都会被丢弃
-cmd > /dev/null 2>&1 # 屏蔽输出和错误
-```
-
-### 注意事项
-
-```sh
-# 反引号用于命令替换，等价于$()
+cmd &gt; /dev/null 2&gt;&amp;1 # 屏蔽输出和错误
+</code></pre>
+<h3 id="1-3-10-">1.3.10. 注意事项</h3>
+<pre><code class="lang-sh"># 反引号用于命令替换，等价于$()
 echo `ll` # 将ll执行的结果打印出来。但结果不会换行
 echo $(ll) # 推荐使用$()
-echo "$(ll)" # 和ll直接执行的结果一样会换行
+echo &quot;$(ll)&quot; # 和ll直接执行的结果一样会换行
 
 # shell脚本的运行
 ./run.sh # 开启子进程执行脚本，无法使用当前shell的普通变量
 source ./run.sh # 不会产生子进程在当前shell中执行脚本，就可以使用当前shell的普通变量了
-. ./run.sh # 第一个'.'的作用和source一样
-# 在脚本文件中使用source或"."相当于是导入了另一个文件，可以使用其中的变量
+. ./run.sh # 第一个&#39;.&#39;的作用和source一样
+# 在脚本文件中使用source或&quot;.&quot;相当于是导入了另一个文件，可以使用其中的变量
 
 # 将多个命令组成成一个整体
 (cmd1;cmd2)
-{ cmd1;cmd2; } # 最后一个命令后面也要有';'，且'{}'与命令之间需要用空格隔开
+{ cmd1;cmd2; } # 最后一个命令后面也要有&#39;;&#39;，且&#39;{}&#39;与命令之间需要用空格隔开
 # ()中的命令会在子shell中执行，而{}会在当前shell中执行
 
 # []与[[]]的区别，总的来说使用[[]]保险一些
 # 1. 判断字符串是否为空
 [ $var ]：判断变量是否为空
 [[ $var ]]：也可以直接使用[[]]
-[ -z "$var" ]：-z选项判断变量是否为空，这时变量需要加上引号，等价于test -n "$var"
+[ -z &quot;$var&quot; ]：-z选项判断变量是否为空，这时变量需要加上引号，等价于test -n &quot;$var&quot;
 [[ -n $var ]]：-n选项判断变量是否非空，使用[[]]时则不需要加引号
 # 2. 逻辑运算符(前面的例子)
 [ $var1 -a $var2 ]：-a和-o只能用在[]里
-[ $var1 ] && [ $var2 ]：&&和||使用[]时必须放在[]外面
-[[ $var1 && $var2 ]]：&&和||使用[[]]时既可放在里面也可放在外面
-[[ $var1 ]] && [[ $var2 ]]
+[ $var1 ] &amp;&amp; [ $var2 ]：&amp;&amp;和||使用[]时必须放在[]外面
+[[ $var1 &amp;&amp; $var2 ]]：&amp;&amp;和||使用[[]]时既可放在里面也可放在外面
+[[ $var1 ]] &amp;&amp; [[ $var2 ]]
 # 3. 关系运算符
 [[ $var =~ /exp/]]：正则表达式=~只能用[[]]
-[ 2 \> 1 ]：大小关系符><使用[]时需要进行转义
-[[ 'a' < 'b' ]]
+[ 2 \&gt; 1 ]：大小关系符&gt;&lt;使用[]时需要进行转义
+[[ &#39;a&#39; &lt; &#39;b&#39; ]]
 
 # [[]]和(())的区别(没完全理清，只记录一些场景)
-# [[]]是增强[]，主要用于-z等条件测试、<、&&等运算符
+# [[]]是增强[]，主要用于-z等条件测试、&lt;、&amp;&amp;等运算符
 # (())是增强()，常用于算术运算，变量可以不使用$
-if (($i<5))
-for ((i=0;i<5;i++))
+if (($i&lt;5))
+for ((i=0;i&lt;5;i++))
 # [[]]与表达式直接要用空格分开，(())可以不用
 # $((exp))和`expr exp`等价
-```
-
-## awk
-
-```sh
-# 基本语法：awk [option] 'pattern {action}' files
+</code></pre>
+<h2 id="1-4-awk">1.4. awk</h2>
+<pre><code class="lang-sh"># 基本语法：awk [option] &#39;pattern {action}&#39; files
 # 默认的action是打印整行，即print $0
 
 # 一个复杂一点的例子
-awk -v name='hb' -F; 'BEGIN{var1=val1;var2=val2}{print $1,$2}END{printf "%s\n","end"}' files
+awk -v name=&#39;hb&#39; -F; &#39;BEGIN{var1=val1;var2=val2}{print $1,$2}END{printf &quot;%s\n&quot;,&quot;end&quot;}&#39; files
 
 # 打印奇偶行简洁写法
-awk 'i=!i' files # 奇数行
-awk '!(i=!i)' fiels # 偶数行
-```
-
-### 变量
-
-```sh
-# 内置变量
+awk &#39;i=!i&#39; files # 奇数行
+awk &#39;!(i=!i)&#39; fiels # 偶数行
+</code></pre>
+<h3 id="1-4-1-">1.4.1. 变量</h3>
+<pre><code class="lang-sh"># 内置变量
 $0：表示整行
 $x：x是一个整数，表示第几列
 NF：表示列数
@@ -442,62 +453,53 @@ ARGC：命令行参数的个数
 ARGV：命令行参数数组，第一个参数就是awk本身，后面的参数是各个操作的文件名
 
 # 自定义变量有两种方式，可以通过-v选项定义，也可以在action中直接定义和使用
-awk 'BEGIN{var=4;print var}'
+awk &#39;BEGIN{var=4;print var}&#39;
 # 数组也可以直接使用，awk中的数组其实是一个字典，它的键可以是字符串
-awk 'BEGIN{arr[3]=8;print arr[3]}'
-# 对于没有定义的变量或数组元素，默认值是空字符串，即""
+awk &#39;BEGIN{arr[3]=8;print arr[3]}&#39;
+# 对于没有定义的变量或数组元素，默认值是空字符串，即&quot;&quot;
 key in arr：判断数组中是否存在某个元素
 delete arr[key]：删除数组中的元素
 delete arr：删除整个数组
 # 注意用for遍历数组时，遍历的是key而不是value，且是无序的
 
 # 对字符串变量进行加法运算时，变量会被当做0
-awk 'BEGIN{var="test";print var+1}'
-```
-
-### option
-
-```sh
-# 分隔符分输入分隔符和输出分隔符，默认都是空格
--F;：指定分号';'为输入分隔符
--v FS=';'：通过内置变量指定输入分隔符
--v OFS='#'：指定输出分隔符为'#'
+awk &#39;BEGIN{var=&quot;test&quot;;print var+1}&#39;
+</code></pre>
+<h3 id="1-4-2-option">1.4.2. option</h3>
+<pre><code class="lang-sh"># 分隔符分输入分隔符和输出分隔符，默认都是空格
+-F;：指定分号&#39;;&#39;为输入分隔符
+-v FS=&#39;;&#39;：通过内置变量指定输入分隔符
+-v OFS=&#39;#&#39;：指定输出分隔符为&#39;#&#39;
 -v VAR=val：自定义变量
-```
-
-### pattern
-
-```sh
-# 当pattern满足条件时，后面的action才会执行
+</code></pre>
+<h3 id="1-4-3-pattern">1.4.3. pattern</h3>
+<pre><code class="lang-sh"># 当pattern满足条件时，后面的action才会执行
 BEGIN：指定在处理文本之前执行的操作
 END：指定在处理文本之后执行的操作
 空模式：任何一行都满足条件
 
-# 关系表达式，如== != < <= > >=
-NR>=5 && NR<=10 # 输出第5行到第10行
+# 关系表达式，如== != &lt; &lt;= &gt; &gt;=
+NR&gt;=5 &amp;&amp; NR&lt;=10 # 输出第5行到第10行
 
 # 正则表达式
 ~：表示匹配正则表达式时为真
 !~：表示不匹配正则表达式时为真
 # 直接使用正则表达式而不说明哪个变量需要满足条件时，默认为整行，即$0~/exp/
 # 当使用匹配次数的正则表达式时，需要加上--posix或--re-interval选项
-awk --posix '/a{2,4}bc/{print}' files
+awk --posix &#39;/a{2,4}bc/{print}&#39; files
 
 # 匹配两个正则表达式之间的行
-'/exp1/,/exp2/' # 匹配exp1第一次出现的行与exp2第一次出现的行之间的所有行
-```
-
-### action
-
-```sh
-print：打印并换行。打印多个数据时如果用逗号','连接，则输出数据会以输出分隔符分隔，否则多个数据会紧连
-printf：用法和printf命令基本一样，只不过格式与字符串之间要用逗号','隔开
+&#39;/exp1/,/exp2/&#39; # 匹配exp1第一次出现的行与exp2第一次出现的行之间的所有行
+</code></pre>
+<h3 id="1-4-4-action">1.4.4. action</h3>
+<pre><code class="lang-sh">print：打印并换行。打印多个数据时如果用逗号&#39;,&#39;连接，则输出数据会以输出分隔符分隔，否则多个数据会紧连
+printf：用法和printf命令基本一样，只不过格式与字符串之间要用逗号&#39;,&#39;隔开
 
 # 条件控制语句，和c++的语法一样
 if () {} else if () {} else {}
 condition?action1:action2 # 三目运算符
 # 循环语句
-for (i=0;i<10;++i) {}
+for (i=0;i&lt;10;++i) {}
 for (key in arr) {}
 while () {}
 do {} while ()
@@ -505,39 +507,30 @@ do {} while ()
 
 next：结束当前行，继续下一行，类似于循环语句中的continue
 exit：直接跳到END模式执行的动作，如果没有END模式则直接结束awk
-```
-
-### 内置函数
-
-```sh
-# 算术函数
+</code></pre>
+<h3 id="1-4-5-">1.4.5. 内置函数</h3>
+<pre><code class="lang-sh"># 算术函数
 srand()：生成随机数种子
 rand()：生成0-1之间的随机数
 int()：转化为整数
 
 # 字符串函数
 length($0)：返回字符串长度，不指定参数时默认为$0
-index($0,'str')：查找子串出现的位置，不存在时返回0
-gsub('old','new',$0)：字符串替换，第3个参数不指定时默认为$0。支持正则表达式
-sub('old','new',$0)：只替换第一个匹配项
+index($0,&#39;str&#39;)：查找子串出现的位置，不存在时返回0
+gsub(&#39;old&#39;,&#39;new&#39;,$0)：字符串替换，第3个参数不指定时默认为$0。支持正则表达式
+sub(&#39;old&#39;,&#39;new&#39;,$0)：只替换第一个匹配项
 split(str,arr,sep)：将str按sep切割，存到arr数组中，下标从1开始。返回的是数组的长度
 
 # 其它函数
 asort(arr)：将数组元素升序排列，但排序后的数组下标会从1开始重置。返回数组的长度
 asort(arr,res)：将排序后的结果存到res，不改变原来的数组
 asorti(arr,res)：将数组的key排序后存到res中。返回数组的长度
-```
-
-## docker
-
-#通用知识
-
-##正则表达式
-
-###普通字符
-
-```sh
-[abc]：匹配abc里的任意字符
+</code></pre>
+<h2 id="1-5-docker">1.5. docker</h2>
+<h1 id="2-">2. 通用知识</h1>
+<h2 id="2-1-">2.1. 正则表达式</h2>
+<h3 id="2-1-1-">2.1.1. 普通字符</h3>
+<pre><code class="lang-sh">[abc]：匹配abc里的任意字符
 [^abc]：匹配非abc里的任意字符
 [a-z]：匹配ASCII码在a和z之间的任意字符
 [!-a]：匹配ASCII码小于等于a的任意字符
@@ -548,71 +541,53 @@ ab|12：匹配ab或12
 \D：匹配非数字
 \w：匹配数字、字母、下划线，等价于[0-9A-Za-z_]
 \W：匹配非数字、字母、下划线
-```
-
-### 非打印字符
-
-```sh
-\r：匹配回车符
+</code></pre>
+<h3 id="2-1-2-">2.1.2. 非打印字符</h3>
+<pre><code class="lang-sh">\r：匹配回车符
 \n：匹配换行符
 \t：匹配制表符
 \v：匹配垂直制表符
 \f：匹配换页符
 \s：匹配所有空白字符，等价于[ \r\n\t\v\f]
 \S：匹配所有非空白字符，等价于[^ \r\n\t\v\f]
-```
-
-###定界符
-
-```sh
-^：锚定行首，即匹配以exp开头的行
+</code></pre>
+<h3 id="2-1-3-">2.1.3. 定界符</h3>
+<pre><code class="lang-sh">^：锚定行首，即匹配以exp开头的行
 $：锚定行尾
-\<：锚定词首，即匹配以exp开头的单词
-\>：锚定词尾
-\b：既可锚定词首又可锚定词尾，即可替换\<或\>
+\&lt;：锚定词首，即匹配以exp开头的单词
+\&gt;：锚定词尾
+\b：既可锚定词首又可锚定词尾，即可替换\&lt;或\&gt;
 \B：匹配非单词边界，即匹配不以exp开头但包含exp的单词
-```
-
-###限定符
-
-```sh
-*：匹配任意次数
+</code></pre>
+<h3 id="2-1-4-">2.1.4. 限定符</h3>
+<pre><code class="lang-sh">*：匹配任意次数
 +：匹配1次或多次
 # *和+默认匹配是贪婪的，即它会尽可能多地去匹配，在其后面加上?可以实现非贪婪匹配
-# 比如对于字符串<h1> title </h1>，正则表达式/<.*>/会匹配整个字符串，而/<.*?>/则只会匹配到<h1>
+# 比如对于字符串&lt;h1&gt; title &lt;/h1&gt;，正则表达式/&lt;.*&gt;/会匹配整个字符串，而/&lt;.*?&gt;/则只会匹配到&lt;h1&gt;
 
 ?：匹配0次或1次
 {n}：匹配n次
 {n,}：匹配至少n次
 {n,m}：匹配至少n次、至多m次
-```
-
-### 分组与引用
-
-```sh
-(exp)：匹配exp并缓存，可用\x(x是一个数字)代替第x个分组匹配的结果
+</code></pre>
+<h3 id="2-1-5-">2.1.5. 分组与引用</h3>
+<pre><code class="lang-sh">(exp)：匹配exp并缓存，可用\x(x是一个数字)代替第x个分组匹配的结果
 # /\b([a-z]+) \1\b/可以用来匹配两个相同相邻的单词，\1表示前面匹配到的那个单词
 
 (?:exp)：匹配exp但不缓存
 exp2(?=exp1)：查找exp1前面的exp2，同样exp1不会被缓存
-(?<=exp1)exp2：查找exp1后面的exp2
+(?&lt;=exp1)exp2：查找exp1后面的exp2
 exp2(?!exp1)：查找后面不是exp1的exp2
-(?<!exp1)exp2：查找前面不是exp1的exp2
-```
-
-### 修饰符
-
-```sh
-/abc/i：不区分大小写
+(?&lt;!exp1)exp2：查找前面不是exp1的exp2
+</code></pre>
+<h3 id="2-1-6-">2.1.6. 修饰符</h3>
+<pre><code class="lang-sh">/abc/i：不区分大小写
 /abc/g：查找所有的匹配项
 /^abc/m：多行匹配，使得^和$匹配每一行的开头和结尾，而不是匹配整个字符串的
 /ab./s：使得.可以匹配换行符，默认情况下.是匹配换行符以外的任意字符
-```
-
-### 内置字符簇
-
-```sh
-[[:digit:]]：数字
+</code></pre>
+<h3 id="2-1-7-">2.1.7. 内置字符簇</h3>
+<pre><code class="lang-sh">[[:digit:]]：数字
 [[:alpha:]]：字母
 [[:alnum:]]：数字和字母
 [[:upper:]]：大写字母
@@ -620,5 +595,26 @@ exp2(?!exp1)：查找后面不是exp1的exp2
 [[:space:]]：空白字符
 [[:punct:]]：任何标点符号
 [[:xdigit:]]：16进制数字，等价于[0-9A-Fa-f]
-```
+</code></pre>
 
+          	</article>
+        </div>
+		</div>
+  </body>
+</html>
+<script type="text/javascript" src="toc/js/jquery-1.4.4.min.js"></script>
+<script type="text/javascript" src="toc/js/jquery.ztree.all-3.5.min.js"></script>
+<script type="text/javascript" src="toc/js/ztree_toc.js"></script>
+<script type="text/javascript" src="toc_conf.js"></script>
+
+<SCRIPT type="text/javascript" >
+<!--
+$(document).ready(function(){
+    var css_conf = eval(markdown_panel_style);
+    $('#readme').css(css_conf)
+    
+    var conf = eval(jquery_ztree_toc_opts);
+		$('#tree').ztree_toc(conf);
+});
+//-->
+</SCRIPT>
