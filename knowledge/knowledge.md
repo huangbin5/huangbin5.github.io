@@ -1,8 +1,324 @@
 # 1. Linux
 
-## 1.1. 常用命令
+```sh
+Ctrl+c：终止程序
+Ctrl+z：挂起程序
+Ctrl+d：发送EOF结束输入
+```
 
-### 1.1.1. echo
+## 1.1. 文件管理
+
+### 1.1.1. 常用文件操作
+
+```sh
+ls # 列出目录
+-a：all。显示隐藏文件
+-A：-a除了当前目录.和上级目录..
+-l：显示详细信息
+-d：directory。只显示目录本身，而不是目录里的数据
+-F：在最后面显示文件类别
+
+cd # 切换目录
+~：用户home目录
+..：上级目录
+
+pwd # 显示当前绝对路径
+-P：显示链接指向的真实路径
+
+mkdir # 创建目录
+-p：parent。创建多级目录，如a/b/c
+-m：mode。指定新目录的权限，而不是使用默认的权限
+
+cp # 复制文件/目录
+-r：recursive。递归复制目录
+-i：interactive。当目标存在时提示是否覆盖
+-p：preserve。保留文件的属性一起复制过去(备份时常用)
+
+mv # 移动文件/目录
+-i：当目标存在时提示是否覆盖
+
+rm # 删除文件/目录
+-r：递归删除目录
+-f：force。文件不存在时不提示
+-i：删除确认
+```
+
+### 1.1.2. touch
+
+```sh
+touch file # 修改file的时间属性，若file不存在则新建文件
+-c：若file不存在，不新建文件
+```
+
+### 1.1.3. ln
+
+```sh
+ln source link # 给source创建硬链接link
+-s：soft。创建软链接
+
+unlink link：删除链接
+```
+
+### 1.1.4. chmod
+
+```sh
+-R：递归处理子目录
+
+# 更改文件所属组，但该组必须是用户所在组
+chgrp group file
+
+# 更改文件的所有者及所属组，需要root权限
+chown user:group file
+chown user file # 只改变所有者
+chown :group file # 只改变所属组
+
+# 更改文件权限
+chmod mode file
+# [ugoa][+-=][rwx]
+chmod u+w,g-x,o= file # 符号模式，a可省略
+chmod 777 file # 数字模式
+```
+
+### 1.1.5. find
+
+```sh
+# 基本用法：find path -size +2k -a -type f -ok rm -rf {} \;
+path：查找的路径，默认为当前目录
+
+-name name # 根据文件名查找
+-iname # 忽略大小写
+
+-size +2k # 根据文件大小查找
+2k：大小为2KB
+-：比2KB小
++：比2KB大
+b：默认单位，512B
+c：Byte
+k：KB
+M：MB
+G：GB
+
+-type f # 根据文件类型查找
+d：目录
+f：文件
+l：软链接
+
+-atime 10 # 访问时间，单位天
+-mtime # 数据修改时间
+-ctime # 状态修改时间
+# 还有对应的-amin、-mmin、-cmin单位是分钟
+10：第10~11天之间
+-10：第10天以内
++10：第11天之前
+
+-perm 642 # 根据权限查找
+642：权限为642
+-642：权限完全包含642
++642：三组权限任意一组包含即可，如711、142都满足
+
+-user # 根据用户名查找
+-uid # 根据用户ID查找
+-group # 根据用户组查找
+-gid # 根据用户组ID查找
+-nouser # 查找没有所有者的文件，比如U盘里面的文件或网络上下载的文件
+# 一般-nouser可以用来查找垃圾文件
+
+# 逻辑运算
+-a：and。与
+-o：or。或
+-not：非
+!：非
+find ! -name test # 注意!的前后都要有空格
+
+# find查找到目标后的默认动作是-print，即把目标打印出来
+-exec cmd {} \; # 执行cmd命令，将目标以{}作为参数传递。注意一定要以\;结尾
+-ok cmd {} \; # 与-exec不同的是-ok在对每个目标执行操作前都会进行确认
+```
+
+### 1.1.6. gzip / zip / unzip
+
+```sh
+gzip file # 压缩成.gz，原文件会被删除
+-r：递归压缩目录
+-d：decompress。解压缩.gz文件
+-l：查看被压缩文件的相关信息
+
+zip target source # 压缩成.zip，原文件不会被删除
+-r：递归压缩目录
+-d：delete。从.zip文件中移除文件
+zip target -d source # 注意.zip文件要放在前面
+
+unzip file # 解压缩.zip文件
+```
+
+### 1.1.7. tar
+
+```sh
+tar -zxvf target source # 打包压缩成.tar.gz格式
+tar -zxvf file # 解压缩.tar.gz文件
+tar -ztvf file # 查看压缩文件里的内容
+-z：使用gzip、zip进行压缩
+-v：显示执行过程
+-f：file。要压缩/解压的文件
+-c：create。创建压缩文件
+-x：extract。解压文件
+-t：列出压缩文件内容
+```
+
+### 1.1.8. rcp / scp
+
+```sh
+rcp user@host:source user@host:target # 远程复制文件
+-r：recursion。递归目录
+-p：preserve。保留原文件的属性
+
+scp user@host:source user@host:target # scp是rcp的加强版，传输是加密的
+-P：port。指定scp所开放的端口(注意是大写的P，小写的p是保留原文件的属性)
+```
+
+### 1.1.9. rsync
+
+```sh
+# rsync用来进行远程同步，可以替代cp和mv命令
+# rsync仅传输差异部分，因此效率比scp要高
+rsync source target # 将source同步到target目录里，形成target/source
+rsync source/ target # 将source里的内容同步到target目录里，不会在target里创建source目录
+-r：递归同步子目录
+-a：archive。同步一些属性，一般用-a而不是-r
+-v：verbose。显示变动情况
+--delete：删除target中存在而source中不存在的内容，形成source的一个镜像
+--exclude：排除部分文件不同步
+--exclude='.*' # 排除以.开头的隐藏文件
+--exclude={'*.txt','*.jpg'} # 排除多种模式
+--exclude-from='exclude-file' # 排除文件里的每一行模式
+--include：与--exclude一起使用，将--exclude排除的一些文件重新包含进来进行同步
+--link-dest：指定基准目录，当文件存在基准目录中时在target创建其硬链接，否则才进行同步
+```
+
+## 1.2. 文件内容管理
+
+### 1.2.1. 查看文件内容
+
+```sh
+cat # 从第一行开始查看文件所有内容
+-b：列出非空行的行号
+-n：列出所有行的行号
+-E：显示行尾$
+-T：显示tab符^I
+-A：显示所有字符
+
+tac # 从最后一行开始倒序显示(行内不是倒序)，用法和cat一样
+
+nl # 等价于cat -b
+-w：行号所占用的字符宽度
+
+more # 按页查看文件
+<enter>：向下翻一行
+<space>：向下翻一页
+b：向上翻一页
+q：退出
+/word：查找字符串
+:f：显示当前行号
+
+less # 用法包含more的功能
+?word：向上查找字符串
+n：重复搜索下一个(取决于/向下或?向上)
+N：重复搜索上一个
+
+# less和more的区别
+# 1. less可以通过方向键向上或向下翻一行而more不能
+# 2. less退出后不会再终端显示内容而more会
+# 3. less不必读取整个文件，加载速度会更快
+
+head # 查看开头的几行内容
+-n：设置查看的行数
+
+tail # 查看结尾的几行内容
+-n：设置查看的行数
+-f：动态监测文件末尾的内容(查看日志时常用)
+```
+
+### 1.2.2. grep
+
+```sh 
+# 基本语法：grep [option] exp files
+--color：高亮显示
+-E：Extended。使用扩展正则表达式
+-i：ignore。忽略大小写
+-n：number。显示行号
+-c：count。统计出现的行数(不是次数)
+-B1：Before。显示匹配行的同时显示前面一行
+-A1：After。显示匹配行的同时显示后面一行
+-C1：Context。显示匹配行的同时显示前面和后面一行
+-o：only-matching。只打印匹配到的关键字，若同一行有多个匹配，则会分别打印多行
+-w：word。匹配整个单词
+-v：invert。反向查找，即查找不存在匹配的行
+
+# 只想知道是否有匹配，而不关心在哪匹配
+grep -q exp file
+echo $?
+# 当有匹配时返回0，没有匹配时返回1
+```
+
+### 1.2.3. wc
+
+```sh
+wc file # 统计file的行数、单词数、字节数
+-l：line。只显示行数
+-w：word。只显示单词数
+-c：只显示字节数
+```
+
+### 1.2.4. diff
+
+```sh
+diff file1 file2 # 比较两个文件的差异。若是目录，则比较目录下同名文件的差异，默认不会递归子目录
+-i：ignore。忽略大小写
+-r：递归比较子目录中的文件
+-y：并排显示两个文件的异同
+-W：width。在-y时指定每一栏的宽度
+--left-column：在-y时内容相同的行只显示左边一栏
+--suppress-common-lines：在-y时不显示相同的行
+
+diff <(cmd1) <(cmd2) # 比较两个命令输出的差异，<是重定向符
+```
+
+### 1.2.5. sed
+
+```sh
+# 基本语法：sed [option] [-e script] [-f script_file] files
+# 其中在命令中直接输入script时-e选项可以省略
+# 默认会输出处理后的所有行，如果不想要默认输出则使用-n选项
+a：在指定行后面追加一行
+i：在指定行前面插入一行
+d：删除指定行
+c：替换指定行
+s：替换指定字符串
+p：打印指定行。一般与-n一起使用，否则除了打印指定行之外还会默认打印所有行
+
+sed '4a newline' file # 在第4行后面添加一行，内容为newline
+sed '4a \ ' file # 添加只有一个空格的行
+sed '4a \\' file # 添加一个空白行
+sed '3,5d' file # 删除第3-5行
+sed '2,$c newlines' file # 将第2行到最后一行替换为newlines一行
+sed 's/ev/op/g' file # 将ev替换为op，如果最后面没有g，则只替换每一行的第一个匹配项
+sed -n '/^ev/p' file # 打印以ev开头的行
+sed -n '/ev/{s/ev/op/g;p}' file # 将ev替换为op并输出修改的行
+
+-i：inplace。sed默认只输出修改后的内容而不会修改原文件，加上该选项后可修改原文件
+sed -e '2d' -e '5a newline' file # 依次执行多条命令
+```
+
+### 1.2.6. tee
+
+```sh
+tee file # 将标准输入的内容写入文件，同时输出到标准输出中
+-a：append。追加模式
+```
+
+## 1.3. 常用命令
+
+### 1.3.1. echo
 
 ```sh
 -n：newline。不输出换行，默认是会换行的
@@ -31,7 +347,7 @@ echo 'test $a' # $a会按字面输出
 	 0-复位(0可省略)；5-闪烁；7-反色(前背景互换)；8-隐身(字体颜色设为背景色)
 ```
 
-### 1.1.2. printf
+### 1.3.2. printf
 
 ```sh
 # 基本语法：print format input
@@ -55,66 +371,240 @@ echo 'test $a' # $a会按字面输出
 %12.5d：表示占12位宽，整数长度为5，不足时前面补0
 ```
 
-### 1.1.3. grep
-
-```sh 
-# 基本语法：grep [option] exp files
---color：高亮显示
--E：Extended。使用扩展正则表达式
--i：ignore。忽略大小写
--n：number。显示行号
--c：count。统计出现的行数(不是次数)
--B1：Before。显示匹配行的同时显示前面一行
--A1：After。显示匹配行的同时显示后面一行
--C1：Context。显示匹配行的同时显示前面和后面一行
--o：only-matching。只打印匹配到的关键字，若同一行有多个匹配，则会分别打印多行
--w：word。匹配整个单词
--v：invert。反向查找，即查找不存在匹配的行
-
-# 只想知道是否有匹配，而不关心在哪匹配
-grep -q exp file
-echo $?
-# 当有匹配时返回0，没有匹配时返回1
-```
-
-### 1.1.4. sed
+### 1.3.3. seq
 
 ```sh
-# 基本语法：sed [option] [-e script] [-f script_file] files
-# 其中在命令中直接输入script时-e选项可以省略
-# 默认会输出处理后的所有行，如果不想要默认输出则使用-n选项
-a：在指定行后面追加一行
-i：在指定行前面插入一行
-d：删除指定行
-c：替换指定行
-s：替换指定字符串
-p：打印指定行。一般与-n一起使用，否则除了打印指定行之外还会默认打印所有行
-
-sed '4a newline' file # 在第4行后面添加一行，内容为newline
-sed '4a \ ' file # 添加只有一个空格的行
-sed '4a \\' file # 添加一个空白行
-sed '3,5d' file # 删除第3-5行
-sed '2,$c newlines' file # 将第2行到最后一行替换为newlines一行
-sed 's/ev/op/g' file # 将ev替换为op，如果最后面没有g，则只替换每一行的第一个匹配项
-sed -n '/^ev/p' file # 打印以ev开头的行
-sed -n '/ev/{s/ev/op/g;p}' file # 将ev替换为op并输出修改的行
-
--i：inplace。sed默认只输出修改后的内容而不会修改原文件，加上该选项后可修改原文件
-sed -e '2d' -e '5a newline' file # 依次执行多条命令
+seq end # 输出1到end之间的整数
+seq start end # 输出start到end之间的整数
+seq start incr end # 输出从start到end之间，从start开始增量为incr的所有整数
+-s：separator。指定换行符
+-f：format。使用printf中浮点数的格式化符号
+-w：width。在前面添0使得所有的输出等宽
 ```
 
-### 1.1.5. diff
+### 1.3.4. xargs
 
 ```sh
-# 比较两个命令输出的差异
-diff <(cmd1) <(cmd2)
+# xargs捕获命令的输出，传递给另一个命令。所有的换行和空白字符经过xargs都会变成<space>
+# 之所以用xargs，是因为有很多命令不支持用管道来传参数，而用xargs就可以完成这个任务
+cmd | xargs cmd # xargs后面默认的命令是echo
+-n：指定一次使用多少个参数，默认是所有的参数
+-d：指定分隔符，xargs解析输入所使用的分隔符
+-I {}：指定用{}来替代参数，每次传递一个参数
 ```
 
-### 1.1.6. seq
+### 1.3.5. & / jobs / bg / fg / nohup
 
-## 1.2. vim
+```sh
+cmd & # 将程序放在后台运行
+Ctrl+z # 将程序挂起
+jobs # 查看后台运行的程序，每个后台程序都有一个编号
+jobs -l # 额外列出后台程序的PID
+bg 1 # 将挂起的1号后台程序放在后台继续执行
+fg 1 # 将1号后台程序放到前台执行
 
-### 1.2.1. 命令模式
+nohup cmd & # 将程序放在后台执行，但不挂起
+# 默认会在当前文件夹创建一个nohup.out文件保存输出，可重定向到其他文件
+# 若要结束程序运行，用ps指令找到PID再kill
+```
+
+## 1.4. 系统管理
+
+### 1.4.1. ps
+
+```sh
+ps # process status。显示进程的状态信息。ps命令参数很多，只记录几个常用命令
+ps -ef | grep python # 查看在运行的Python进程
+ps -aux # 和-ef是两种不同的风格，都是查看进程的详细信息
+ps -u user # 查看某个用户的进程
+
+# 可以根据ps第一行显示的字段名进行排序
+ps aux --sort=-%cpu # 根据CPU使用量降序排列，-改为+就是升序排列
+ps aux --sort=+rss # 根据内存升序排列
+```
+
+### 1.4.2. top
+
+```sh
+top # 实时显示进程的动态
+-c：显示完整的程序路径
+-d：设置更新的周期，单位秒
+-p：PID。指定显示某个进程
+
+# 以下为top显示界面输入的指令
+u：输入用户名显示指定用户的进程
+```
+
+### 1.4.3. free
+
+```sh
+free # 显示内存使用情况
+-h：以合适的单位显示 # 类似的还有-b -k -m等
+-s：以该周期持续监控
+```
+
+### 1.4.4. df / du
+
+```sh
+df # disk free。列出磁盘空间使用情况
+-h：以易读的单位显示
+-k：以KB单位显示
+-m：以MB单位显示
+
+du file # disk used。列出文件/目录占用空间的情况
+-a：all。将文件的占用空间也显示出来，默认只显示目录的
+-s：summary。只显示使用总量，而不显示各个子目录的使用量
+-d：--max-depth。显示最大子目录深度，最顶级目录深度为0
+```
+
+### 1.4.5. lsof
+
+```sh
+lsof # list opened files。列出系统当前打开的文件，包括特殊文件、网络文件等
+lsof file # 查看打开file的进程
+-p：PID。指定进程号，查看指定进程打开的文件
+-u：user。指定用户名，查看指定用户打开的文件
+-c：cmd。查找运行命令包含cmd的项
+-i：指定使用的协议、端口等信息
+lsof -i:8080 # 查看占用8080端口的进程
+```
+
+### 1.4.6. 用户(组)管理
+
+```sh
+useradd user # 添加账号
+-d：directory。指定主目录。与-m配合使用创建主目录
+-g：group。指定所属主组
+-G：指定所属附加组
+-s：shell。指定登录的shell
+-u：UID。指定用户ID
+
+userdel user # 删除用户
+-r：remove。同时删除用户的主目录
+
+usermod user # 修改用户，用法和useradd一样
+-l：login。修改用户名
+
+passwd user # 修改用户密码，user省略时为当前用户，普通用户只可修改自己的密码
+-l：lock。锁定密码
+-u：unlock。解锁密码
+-d：delete。删除密码
+-e：expire。强制用户下次登录时修改密码
+
+groupadd group # 创建用户组
+-g：GID。指定组ID
+
+groupdel group # 删除用户组
+
+groupmod group # 修改用户组，用法同groupadd
+-n：new。修改用户组名
+
+newgrp group # 用户登录后默认在主组中，次命令切换到附加组
+```
+
+### 1.4.7. shutdown
+
+```sh
+# 关机、重启
+shutdown -h now/10/22:05 # 立即/10分钟后/在22:05关机
+shutdown -r now/10/22:05 # 立即/10分钟后/在22:05重启
+poweroff # 关机
+reboot # 重启
+init 0 # 关机
+init 6 # 重启
+shutdown -c # 取消定时关机/重启
+```
+
+## 1.5. 系统工具
+
+### 1.5.1. crontab
+
+```sh
+crontab # 定时任务管理工具
+-e：edit。编辑定时任务
+# 添加环境变量 export VISUAL=vim 将使用vim编辑
+-l：list。查看定时任务
+-r：remove。删除定时任务
+
+# 定时任务书写格式
+min hour day mon week cmd # 分钟 小时 天 月 星期。注意星期是0-6
+*：表示每分钟(其它单位类似)
+*/n：每n分钟
+a-b：第a-b分钟
+a,b,c：第a,b,c分钟
+a-b/n：第a-b分钟之间每n分钟
+```
+
+### 1.5.2. alias
+
+```sh
+alias # 查看所有的别名
+alias newcmd="cmd" # 为cmd起个别名
+
+unalias newcmd # 删除别名
+unalias -a # 删除所有别名
+```
+
+### 1.5.3. date
+
+```sh
+date format # 格式化输出日期和时间
+%Y-年 %m-月 %d-日 %H-时 %M-分 %S-秒
+%a(A)：星期的缩写(全称)
+%b(B)：月份的缩放(全称)
+%s：自 1970-01-01 00:00:00 UTC 到现在的秒数
+%n：换行符
+%%：%本身
+date +"%Y/%m/%d %H:%M:%S" # 若要省略前缀0，则在相应的字段前面加一杠'-'
+# 格式前面加一个加号+表示显示时间，否则为设定时间，设定时间的格式为mmddHHMM[[CC]yy][.SS]。注意设置时间后要使用clock -w写入，这样下次开机后才会保持这次修改
+
+-d：显示字符串表示的时间
+date -d '2022/11/11' +"%Y-%m-%d" # 时间格式转化
+date -d@1234567890 +"%Y-%m-%d" # 自 1970-01-01 00:00:00 UTC 到现在的秒数所表示的时间
+date -d "1 day ago" +"%Y-%m-%d" # 1天前
+date -d "-1 year" +"%Y-%m-%d" # 1年前
+date -d "1 month" +"%Y-%m-%d" # 1个月后
+```
+
+### 1.5.4. sleep
+
+```sh
+sleep 5s # 睡眠5秒
+s-秒 m-分 h-时 d-天
+```
+
+### 1.5.5. which / whereis
+
+```sh
+which cmd # 在$PATH中查找命令的位置，有多条结果时输出第一条
+-a：all。有多条结果时输出所有
+
+whereis cmd # 查找命令的二进制文件、源代码文件、帮助文件
+-b：binary。只查找二进制文件
+-s：source。只查找源代码文件
+-m：manuscript。只查找帮助文件
+```
+
+### 1.5.6. who / whoami
+
+```sh
+who # 查看有哪些终端在使用该Linux系统
+-H：heading。显示标题栏，即每个字段的含义
+-m：显示当前终端信息，与who am i等价
+
+whoami # 显示当前用户的名称
+```
+
+### 1.5.7. su
+
+```sh
+su # switch user。切换用户，不带参数则切换为root
+su - user # 切换用户并切换目录到新用户的主目录
+```
+
+## 1.6. vim
+
+### 1.6.1. 命令模式
 
 ```sh
 # 移动光标
@@ -173,7 +663,7 @@ Ctrl+r：重做
 .：重复上一个操作
 ```
 
-### 1.2.2. 编辑模式
+### 1.6.2. 编辑模式
 
 ```sh
 # 进入编辑模式
@@ -187,7 +677,7 @@ r：替换光标位置字符(替换一个字符后就会退出编辑模式)
 R：进入替换模式(会一直往后替换)
 ```
 
-### 1.2.3. 底线模式
+### 1.6.3. 底线模式
 
 ```sh
 :w：保存
@@ -200,7 +690,7 @@ R：进入替换模式(会一直往后替换)
 :set nonu：取消行号
 ```
 
-### 1.2.4. 一些技巧
+### 1.6.4. 一些技巧
 
 ```sh
 Ctrl+v：进入可视模式
@@ -212,9 +702,9 @@ Ctrl+n：补全提示
 :5,12s/#//g：取消注释
 ```
 
-## 1.3. shell
+## 1.7. shell
 
-### 1.3.1. 变量
+### 1.7.1. 变量
 
 ```sh
 # 全局变量
@@ -258,7 +748,7 @@ declare -r var=value # 声明只读变量
 declare -xr var=value # 声明一个只读环境变量
 ```
 
-### 1.3.2. 字符串
+### 1.7.2. 字符串
 
 ```sh
 # 定义字符串
@@ -297,7 +787,7 @@ ${var:+value}：当var不为空时返回value，也不进行赋值操作
 ${var:?value}：输出bash错误，其中value为错误提示信息
 ```
 
-### 1.3.3. 数组
+### 1.7.3. 数组
 
 ```sh
 var=(value1 value2 ...) # 定义数组
@@ -314,7 +804,7 @@ ${!var[@]}：获取所有的key
 ${!var[*]}：同上
 ```
 
-### 1.3.4. 算术运算
+### 1.7.4. 算术运算
 
 ```sh
 # 使用let命令，支持++、--、+=、-=
@@ -343,7 +833,7 @@ var=$((8/3)) # $var=2
 declare -i var=1+3 # $var=4
 ```
 
-### 1.3.5. 逻辑关系运算符
+### 1.7.5. 逻辑关系运算符
 
 ```sh
 # 非：!
@@ -370,7 +860,7 @@ cmd1 || cmd2 # 当cmd1执行失败后执行cmd2
 [[ $var =~ /exp/]]
 ```
 
-### 1.3.6. 文件测试运算符
+### 1.7.6. 文件测试运算符
 
 ```sh
 # file是文件路径
@@ -382,7 +872,7 @@ cmd1 || cmd2 # 当cmd1执行失败后执行cmd2
 [ -e $file ]：判断文件是否存在
 ```
 
-### 1.3.7. 控制流程
+### 1.7.7. 控制流程
 
 ```sh
 # 条件控制语句
@@ -435,7 +925,7 @@ case var in
 esac
 ```
 
-### 1.3.8. 函数
+### 1.7.8. 函数
 
 ```sh
 function func() { # function关键字和()都可以省略
@@ -446,7 +936,7 @@ func # 直接调用函数
 func 1 2 3: # 带参数调用，函数内部可以使用$1之类的变量获取参数
 ```
 
-### 1.3.9. 重定向
+### 1.7.9. 重定向
 
 ```sh
 cmd > file # 输出重定向，覆盖原文件
@@ -460,7 +950,7 @@ cmd < file1 > file2 # 将输入和输出都重定向
 cmd > /dev/null 2>&1 # 屏蔽输出和错误
 ```
 
-### 1.3.10. 通配符
+### 1.7.10. 通配符
 
 ```sh
 ?：匹配任意单个字符
@@ -482,7 +972,7 @@ ab{,c}：匹配ab或abc
 ls */*.jpg
 ```
 
-### 1.3.11. 注意事项
+### 1.7.11. 注意事项
 
 ```sh
 # 反引号用于命令替换，等价于$()
@@ -526,16 +1016,7 @@ for ((i=0;i<5;i++))
 # $((exp))和`expr exp`等价
 ```
 
-### 1.3.12. 内置命令alias
-
-```sh
-alias # 查看所有的别名
-alias newcmd="cmd" # 为cmd起个别名
-unalias newcmd # 删除别名
-unalias -a # 删除所有别名
-```
-
-### 1.3.13. 内置命令read
+### 1.7.12. 内置命令read
 
 ```sh
 read var # 将读取的内容赋值给var
@@ -548,7 +1029,7 @@ read var # 将读取的内容赋值给var
 -r：raw。不将\作为转义字符，直接读取字符串本身的内容
 ```
 
-### 1.3.14. 内置命令declare
+### 1.7.13. 内置命令declare
 
 ```sh
 -：设置属性
@@ -566,7 +1047,7 @@ declare +i var # 取消var的整数属性
 var=string # $var=string
 ```
 
-## 1.4. awk
+## 1.8. awk
 
 ```sh
 # 基本语法：awk [option] 'pattern {action}' files
@@ -580,7 +1061,7 @@ awk 'i=!i' files # 奇数行
 awk '!(i=!i)' fiels # 偶数行
 ```
 
-### 1.4.1. 变量
+### 1.8.1. 变量
 
 ```sh
 # 内置变量
@@ -613,7 +1094,7 @@ delete arr：删除整个数组
 awk 'BEGIN{var="test";print var+1}'
 ```
 
-### 1.4.2. option
+### 1.8.2. option
 
 ```sh
 # 分隔符分输入分隔符和输出分隔符，默认都是空格
@@ -623,7 +1104,7 @@ awk 'BEGIN{var="test";print var+1}'
 -v VAR=val：自定义变量
 ```
 
-### 1.4.3. pattern
+### 1.8.3. pattern
 
 ```sh
 # 当pattern满足条件时，后面的action才会执行
@@ -645,7 +1126,7 @@ awk --posix '/a{2,4}bc/{print}' files
 '/exp1/,/exp2/' # 匹配exp1第一次出现的行与exp2第一次出现的行之间的所有行
 ```
 
-### 1.4.4. action
+### 1.8.4. action
 
 ```sh
 print：打印并换行。打印多个数据时如果用逗号','连接，则输出数据会以输出分隔符分隔，否则多个数据会紧连
@@ -665,7 +1146,7 @@ next：结束当前行，继续下一行，类似于循环语句中的continue
 exit：直接跳到END模式执行的动作，如果没有END模式则直接结束awk
 ```
 
-### 1.4.5. 内置函数
+### 1.8.5. 内置函数
 
 ```sh
 # 算术函数
